@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Usuario, Curso, Login
+from app.models import Usuario, Curso
 
 class FormCadastroUser(forms.ModelForm):
     class Meta:
@@ -19,15 +19,15 @@ class FormCadastroCurso(forms.ModelForm):
             'nome_curso': forms.TextInput(attrs={'placeholder': 'Nome do Curso', 'class': 'form-control' }),
             'autor': forms.TextInput(attrs={'placeholder': 'Nome do autor', 'class': 'form-control' }),
             'duracao': forms.NumberInput(attrs={'placeholder': 'Duração em horas', 'class': 'form-control' }),
-            'preco': forms.NumberInput(attrs={'step':'0.01', 'placeholder': 'Preço em R$', 'class': 'form-control' })
+            'preco': forms.NumberInput(attrs={'step':'0.01', 'placeholder': 'Preço em R$', 'class': 'form-control' }),
 
         }
 
 class FormLogin(forms.ModelForm):
     class Meta:
-        model = Login 
+        model = Usuario 
         fields = ('email', 'senha')
         widgets = {
-            'email': forms.TextInput(attrs={'class': 'form-control border border-success', 'type': 'email' }),
-            'senha': forms.TextInput(attrs={'class': 'form-control border border-success', 'type': 'password' })        
+            'email': forms.EmailInput(attrs={'placeholder': 'usuario@email.com', 'class': 'form-control' }),
+            'senha': forms.PasswordInput(attrs={'class': 'form-control border border-success', 'type': 'password' }),        
             }

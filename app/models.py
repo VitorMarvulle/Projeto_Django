@@ -12,8 +12,3 @@ class Curso(models.Model):
     autor = models.CharField(max_length=255)
     duracao = models.IntegerField()
     preco = models.DecimalField(max_digits=10,decimal_places=2)
-
-class Login(models.Model):
-    usuario = models.CharField(max_length=255)
-    email = models.EmailField()
-    senha = models.CharField(max_length=16)

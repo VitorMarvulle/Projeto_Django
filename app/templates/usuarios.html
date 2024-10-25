@@ -17,6 +17,10 @@
                 <tr>
                     <td>{{ user.nome }}</td>
                     <td>{{ user.email }}</td>
+                    <td>
+                        <a href="{% url 'editar_usuario' user.id %}" class="btn btn-warning">Editar</a>
+                        <a href="{% url 'excluir_usuario' user.id %}" class="btn btn-danger">Excluir</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

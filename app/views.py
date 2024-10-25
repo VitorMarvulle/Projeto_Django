@@ -1,12 +1,12 @@
 from datetime import timedelta
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
 
 #importa a funcao get_template() do módulo loader
-from django.template import loader
 from app.forms import FormCadastroUser, FormCadastroCurso, FormLogin
 from django.contrib import messages
-from app.models import Usuario, Curso, Login
+from app.models import Usuario, Curso
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth import logout
 
 def app(request):
     
@@ -65,23 +65,44 @@ def exibir_curso(request):
 
 def fazerlogin(request):
     formL = FormLogin(request.POST or None)
-    
-    if request.method == 'POST':
-        if formL.is_valid():
-            _email = formL.cleaned_data.get('email')
-            _senha = formL.cleaned_data.get('senha')
-            try:
-                usuarioL = Login.objects.get(email=_email, senha=_senha)
-                if usuarioL:
-                    # Define a duração da sessão como 30 segundos
-                    request.session.set_expiry(timedelta(seconds=30))
-                    # Cria uma sessão com o email do usuário
-                    request.session['email'] = _email
-                    return redirect('app')  # Altere 'app' para a URL que você deseja redirecionar
-            except Login.DoesNotExist:
+
+    if request.method == 'POST':       
+        _email = request.POST.get('email')
+        _senha = request.POST.get('senha')
+
+        if not _email or not _senha:
+            messages.error(request, 'Por favor, preencha todos os campos.')
+            return render(request, 'login.html', {'formLogin': formL})
+
+        try:
+            usuarioL = Usuario.objects.get(email=_email)
+            if check_password(_senha, usuarioL.senha):  
+                request.session.set_expiry(timedelta(seconds=30))
+                request.session['email'] = _email
+                return redirect('app') 
+            else:
                 messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
-    
+        except Usuario.DoesNotExist:
+            messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
+
     context = {
         'formLogin': formL
     }
     return render(request, 'login.html', context)
+
+def editar_usuario(request, id_usuario):
+    usuario = Usuario.objects.get(id=id_usuario)
+    form = FormCadastroUser(request.POST or None, instance=usuario)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            return redirect('exibir_user')
+    context = {
+            'form' : form
+        }
+    return render(request, 'editar_usuario.html', context)
+
+def excluir_usuario(request, id_usuario):
+    usuario = Usuario.objects.get(id=id_usuario)
+    usuario.delete()
+    return redirect('exibir_user')
