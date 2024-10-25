@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %} Cadastro {% endblock %}
+{% block conteudo %}
+
+<div class="container border border-primary border-opacity-50 rounded mb-5 mt-5 w-25 bg-primary bg-opacity-10">
+
+    <div class="container col-6 mt-5 "></div>
+
+        <h1>Novo Curso</h1>
+        <form action="{% url 'cadastrar_curso' %}" method="POST">
+
+            {% csrf_token %}
+
+            <label class="form-label">Nome do Curso</label>
+            {{form.nome_curso}}
+            <label class="form-label">Autor</label>
+            {{form.autor}}
+            <label class="form-label">Duração</label>
+            {{form.duracao}}
+            <label class="form-label">Preco</label>
+            {{form.preco}}
+
+            <input type="submit" value="Cadastrar" class="btn btn-success mt-3 mb-3">
+        </form>    
+    </div>
+</div>
+{% endblock %}
+
