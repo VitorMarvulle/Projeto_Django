@@ -14,7 +14,13 @@ urlpatterns = [
     path('usuarios/' , views.exibir_user, name="exibir_user"),
     path('cursos/' , views.exibir_curso, name="exibir_curso"),
     path('cadastro_curso/' , views.cadastrar_curso, name="cadastrar_curso"),
+    
     #editar e excluir
     path('editar_usuario/<int:id_usuario>' , views.editar_usuario, name="editar_usuario"),
     path('excluir_usuario/<int:id_usuario>' , views.excluir_usuario, name="excluir_usuario"),
+
+    #dashboard
+    path('dashboard/', views.dashboard, name="dashboard"),
+    path('alterar_senha/', views.alterar_senha, name='alterar_senha'),
+    path('excluir_conta/', views.excluir_conta, name='excluir_conta'),
 ]

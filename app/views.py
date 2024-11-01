@@ -19,14 +19,19 @@ def app(request):
 
 def cadastrar_user(request):
     novo_user = FormCadastroUser(request.POST or None)
-    #SALVAR USUÁRIO
-    if request.POST:
-        if novo_user. is_valid():
-            novo_user.save()
-            messages.success(request, "Usuário Cadastrado com sucesso!")
-            return redirect('app')
+    
+    # SALVAR USUÁRIO
+    if request.method == 'POST':
+        if novo_user.is_valid():
+            usuario = novo_user.save(commit=False)  # Evita salvar imediatamente no banco
+            # Criptografa a senha antes de salvar
+            usuario.senha = make_password(novo_user.cleaned_data['senha'])
+            usuario.save()  # Agora salva com a senha criptografada
+            messages.success(request, "Usuário cadastrado com sucesso!")
+            return redirect('app')  # Redireciona para a página principal ou de login
+    
     context = {
-        'form' : novo_user
+        'form': novo_user
     }
 
     return render(request, 'cadastro.html', context)
@@ -63,13 +68,26 @@ def exibir_curso(request):
 
     return render(request, 'cursos.html', context)
 
+def dashboard(request):
+    if not request.session.get('email'):
+        return redirect('fazerlogin')
+
+    email = request.session['email']
+    usuario = Usuario.objects.get(email=email)
+
+    context = {
+        'usuario': usuario
+    }
+    
+    return render(request, 'dashboard.html', context)
+
 def fazerlogin(request):
     formL = FormLogin(request.POST or None)
-
+    
     if request.method == 'POST':       
         _email = request.POST.get('email')
         _senha = request.POST.get('senha')
-
+        
         if not _email or not _senha:
             messages.error(request, 'Por favor, preencha todos os campos.')
             return render(request, 'login.html', {'formLogin': formL})
@@ -77,18 +95,46 @@ def fazerlogin(request):
         try:
             usuarioL = Usuario.objects.get(email=_email)
             if check_password(_senha, usuarioL.senha):  
-                request.session.set_expiry(timedelta(seconds=30))
+                request.session.set_expiry(30)  # Sessão de 30 segundos
                 request.session['email'] = _email
-                return redirect('app') 
+                messages.success(request, 'Login bem-sucedido!')
+                return redirect('dashboard')  # Redireciona para o dashboard
             else:
                 messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
         except Usuario.DoesNotExist:
             messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
+    
+    return render(request, 'login.html', {'formLogin': formL})
+    formL = FormLogin(request.POST or None)
 
-    context = {
-        'formLogin': formL
-    }
-    return render(request, 'login.html', context)
+    if request.method == 'POST':       
+        _email = request.POST.get('email')
+        _senha = request.POST.get('senha')
+
+        # Verifica se os campos foram preenchidos
+        if not _email or not _senha:
+            messages.error(request, 'Por favor, preencha todos os campos.')
+            return render(request, 'login.html', {'formLogin': formL})
+
+        try:
+            usuarioL = Usuario.objects.get(email=_email)
+            
+            # Verifica a senha armazenada
+            if usuarioL.senha and check_password(_senha, usuarioL.senha):
+                # Define a duração da sessão como 30 segundos
+                request.session.set_expiry(30)  
+                request.session['email'] = _email
+                return redirect('dashboard')  # Redireciona para a view da dashboard
+
+            else:
+                # Caso a senha não coincida
+                messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
+        
+        except Usuario.DoesNotExist:
+            messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
+
+    # Renderiza novamente a página de login se o método não for POST
+    return render(request, 'login.html', {'formLogin': formL})
 
 def editar_usuario(request, id_usuario):
     usuario = Usuario.objects.get(id=id_usuario)
@@ -103,6 +149,54 @@ def editar_usuario(request, id_usuario):
     return render(request, 'editar_usuario.html', context)
 
 def excluir_usuario(request, id_usuario):
+
     usuario = Usuario.objects.get(id=id_usuario)
     usuario.delete()
     return redirect('exibir_user')
+
+def excluir_conta(request):
+    if not request.session.get('email'):
+        return redirect('fazerlogin')
+    
+    email = request.session['email']
+    usuario = Usuario.objects.get(email=email)
+
+    # Exclui o usuário
+    usuario.delete()
+    
+    # Limpa a sessão do usuário
+    request.session.flush()  
+    
+    # Redireciona para a página inicial
+    messages.success(request, 'Conta excluída com sucesso.')
+    return redirect('app')  # Ou o nome da sua página inicial
+
+def alterar_senha(request):
+    if not request.session.get('email'):
+        return redirect('fazerlogin')
+
+    if request.method == 'POST':
+        email = request.session['email']
+        usuario = Usuario.objects.get(email=email)
+        
+        senha_atual = request.POST.get('senha_atual')
+        nova_senha = request.POST.get('nova_senha')
+        confirmacao_senha = request.POST.get('confirmacao_senha')
+
+        # Verifica se a senha atual está correta
+        if not check_password(senha_atual, usuario.senha):
+            messages.error(request, 'A senha atual está incorreta.')
+            return render(request, 'alterar_senha.html')
+
+        # Verifica se a nova senha e a confirmação coincidem
+        if nova_senha != confirmacao_senha:
+            messages.error(request, 'As senhas não coincidem.')
+            return render(request, 'alterar_senha.html')
+
+        # Atualiza a senha
+        usuario.senha = make_password(nova_senha)  # Criptografa a nova senha
+        usuario.save()
+        messages.success(request, 'Senha alterada com sucesso!')
+        return redirect('dashboard')
+
+    return render(request, 'alterar_senha.html')

@@ -5,7 +5,7 @@
 
 <div class="container w-50">
     <h1 class = "text-center">Fazer Login</h1>
-    <form method="post">
+    <form method="post" action="{% url 'fazerlogin' %}">
         {% csrf_token %}
         {{ formLogin }}
         <div class="d-grid gap-2">
