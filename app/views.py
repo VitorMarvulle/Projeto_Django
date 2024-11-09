@@ -2,7 +2,7 @@ from datetime import timedelta
 from django.shortcuts import render,redirect
 
 #importa a funcao get_template() do módulo loader
-from app.forms import FormCadastroUser, FormCadastroCurso, FormLogin, FormFoto
+from app.forms import FormCadastroUser, FormCadastroCurso, FormLogin, FormFoto, FormContato
 from django.contrib import messages
 from app.models import Usuario, Curso, Foto
 from django.contrib.auth.hashers import make_password, check_password
@@ -18,7 +18,7 @@ def app(request):
     return render(request, 'index.html', context)
 
 def cadastrar_user(request):
-    novo_user = FormCadastroUser(request.POST or None)
+    novo_user = FormCadastroUser(request.POST or None, request.FILES or None)
     
     # SALVAR USUÁRIO
     if request.method == 'POST':
@@ -37,7 +37,7 @@ def cadastrar_user(request):
     return render(request, 'cadastro.html', context)
 
 def cadastrar_curso(request):
-    novo_curso = FormCadastroCurso(request.POST or None)
+    novo_curso = FormCadastroCurso(request.POST or None, request.FILES or None)
     #SALVAR USUÁRIO
     if request.POST:
         if novo_curso. is_valid():
@@ -51,7 +51,7 @@ def cadastrar_curso(request):
     return render(request, 'cadastro_curso.html', context)
 
 def exibir_user(request):
-    usuarios = Usuario.objects.all().values()
+    usuarios = Usuario.objects.all()
 
     context = {
         'dados' : usuarios
@@ -60,7 +60,7 @@ def exibir_user(request):
     return render(request, 'usuarios.html', context)
 
 def exibir_curso(request):
-    cursos = Curso.objects.all().values()
+    cursos = Curso.objects.all()
 
     context = {
         'cursos' : cursos
@@ -104,36 +104,6 @@ def fazerlogin(request):
         except Usuario.DoesNotExist:
             messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
     
-    return render(request, 'login.html', {'formLogin': formL})
-    formL = FormLogin(request.POST or None)
-
-    if request.method == 'POST':       
-        _email = request.POST.get('email')
-        _senha = request.POST.get('senha')
-
-        # Verifica se os campos foram preenchidos
-        if not _email or not _senha:
-            messages.error(request, 'Por favor, preencha todos os campos.')
-            return render(request, 'login.html', {'formLogin': formL})
-
-        try:
-            usuarioL = Usuario.objects.get(email=_email)
-            
-            # Verifica a senha armazenada
-            if usuarioL.senha and check_password(_senha, usuarioL.senha):
-                # Define a duração da sessão como 30 segundos
-                request.session.set_expiry(30)  
-                request.session['email'] = _email
-                return redirect('dashboard')  # Redireciona para a view da dashboard
-
-            else:
-                # Caso a senha não coincida
-                messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
-        
-        except Usuario.DoesNotExist:
-            messages.error(request, 'Credenciais inválidas. Por favor, tente novamente!')
-
-    # Renderiza novamente a página de login se o método não for POST
     return render(request, 'login.html', {'formLogin': formL})
 
 def editar_usuario(request, id_usuario):
@@ -218,3 +188,24 @@ def galeria(request):
         'galeria' : fotos
     }
     return render (request, 'galeria.html', context)
+
+def excluir_curso(request, id_curso):
+    curso = Curso.objects.get(id=id_curso)
+    curso.delete()
+    return redirect('exibir_curso')
+
+def contato(request):
+    novo_contato = FormContato(request.POST or None)
+    
+    # SALVAR USUÁRIO
+    if request.method == 'POST':
+        if novo_contato.is_valid():
+            contato = novo_contato.save(commit=True)
+            messages.success(request, "Mensagem enviada com sucesso!")
+            return redirect('app')  # Redireciona para a página principal ou de login
+    
+    context = {
+        'form': novo_contato
+    }
+
+    return render(request, 'contato.html', context)

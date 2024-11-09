@@ -1,24 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block titulo %} Cursos {% endblock %}
+{% block titulo %} Projetos - Repositórios {% endblock %}
 {% block conteudo %}
 
 <div class="container mt-4">
+    <h1 style="color: aliceblue;">PROJETOS & REPOSITÓRIOS</h1>
     <div class="row">
         {% for curso in cursos %}
-        <div class="col-lg-4 col-md-6 mb-4">  <!-- Cada curso ocupará 4 colunas no grid -->
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">{{ curso.nome_curso }}</h5> <!-- Nome do curso -->
-                    <p class="card-text"><strong>Autor:</strong> {{ curso.autor }}</p>
-                    <p class="card-text"><strong>Duração:</strong> {{ curso.duracao }} horas</p>
-                    <p class="card-text"><strong>Preço:</strong> R$ {{ curso.preco }}</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Comprar</a>
+            <div class="col-lg-4 col-md-6 mb-4">  <!-- Cada curso ocupará 4 colunas no grid -->
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        {% if curso.foto %}
+                            <img src="{{ curso.foto.url }}" alt="Foto do projeto" class="rounded-circle mb-3" width="150" height="150">
+                        {% else %}
+                            <p>Foto não disponível</p>
+                        {% endif %}
+                        <h5 class="card-title text-center">{{ curso.nome_curso }}</h5> 
+                        <p class="card-text text-center"><strong>Autor:</strong> {{ curso.autor }}</p>
+                        <p class="card-text text-center"><strong>Duração:</strong> {{ curso.duracao }} horas</p>
+                        <p class="card-text text-center"><strong>Preço:</strong> R$ {{ curso.preco }}</p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <a href="#" class="btn_contratar">Contratar</a>
+                        <a href="{% url 'excluir_curso' curso.id %}" class="btn btn-danger rounded-5">Excluir</a>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>

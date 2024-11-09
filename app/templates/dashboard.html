@@ -4,10 +4,15 @@
 {% block titulo %} HOME {% endblock %}
 
 {% block conteudo %}
-<main class="d-flex flex-column align-items-center">
+
+<main class="d-flex flex-column align-items-center" style="color: aliceblue;">
     <h1>Olá, {{ usuario.nome }}!</h1>
     <p>Email: {{ usuario.email }}</p>
-
+    {% if usuario.foto %}
+        <img src="{{ usuario.foto.url }}" alt="Foto de perfil" class="rounded-circle" width="150" height="150">
+    {% else %}
+        <p>Foto não disponível</p>
+    {% endif %}
     <div class="btn-group mt-3">
         <a href="{% url 'alterar_senha' %}" class="btn btn-warning">Alterar Senha</a>
         <a href="{% url 'excluir_conta' %}" class="btn btn-danger">Excluir Conta</a>

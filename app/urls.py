@@ -27,4 +27,11 @@ urlpatterns = [
     #foto
     path('add-foto/', views.add_foto, name='add_foto'),
     path('galeria/', views.galeria, name='galeria'),
+
+    #projetos
+    path('excluir_curso/<int:id_curso>', views.excluir_curso, name='excluir_curso'),
+
+    #contato
+    path('contato', views.contato, name='contato'),
+
 ]

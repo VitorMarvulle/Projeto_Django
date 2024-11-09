@@ -5,23 +5,31 @@
 
 <div class="container mt-4 d-flex justify-content-center">
     <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center">
+        <table class="table table-bordered table-striped text-center border border-3 border-opacity-10 bg-light">
             <thead class="table-dark">
                 <tr>
+                    <th>Foto</th>
                     <th>Nome</th>
                     <th>Email</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in dados %}
-                <tr>
-                    <td>{{ user.nome }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
+                    <tr>
+                        <td>
+                            {% if user.foto %}
+                                <img src="{{ user.foto.url }}" alt="Foto de perfil" class="rounded-circle" width="50" height="50">
+                            {% else %}
+                                <p>Foto não disponível</p>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.nome }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
                         <a href="{% url 'editar_usuario' user.id %}" class="btn btn-warning">Editar</a>
                         <a href="{% url 'excluir_usuario' user.id %}" class="btn btn-danger">Excluir</a>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

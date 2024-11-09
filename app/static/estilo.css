@@ -39,7 +39,7 @@ body{
     padding: 10px 20px;
     font-size: 1rem;
     border-radius: 25px;
-    transition: all 0.8s ease; /* Velocidade ajustada para o efeito de zoom */
+    transition: all 0.8s ease; 
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
@@ -51,7 +51,26 @@ body{
     background-color: #E6E6FA;
     color: #3a033a; 
     border-color: #800080;
-    transform: scale(1.2); /* Aumenta o botão em 10% */
+    transform: scale(1.2); 
+}
+
+.btn_contratar {
+    
+    background-color: rgb(76, 38, 143);
+    color: aliceblue;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 25px;
+    transition: all 0.5s ease;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.btn_contratar:hover {
+    background-color: #280550;
+    color: #ffffff; 
 }
 
 h5{
@@ -59,12 +78,12 @@ h5{
 }
 
 footer .nav.flex-column .nav-link {
-    color: rgb(96, 98, 100) !important; /* Substitua pela cor desejada */
+    color: rgb(96, 98, 100) !important; 
 }
 
 /* Estilo hover para o link */
 footer .nav.flex-column .nav-link:hover {
-    color: rgb(238, 221, 248) !important; /* Substitua pela cor desejada */
+    color: rgb(238, 221, 248) !important; 
 }
 
 
