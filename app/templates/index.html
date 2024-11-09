@@ -4,17 +4,21 @@
 {% block titulo %} HOME {% endblock %}
 
 {% block conteudo %}
-<main class="d-flex justify-content-center">
-
-    <div>
-        <img src="{% static 'fundo.jpg' %}" width="50%">
+<main class="d-flex justify-content-center align-items-center text-center" style="min-height: 80vh;">
+    <div class="d-flex flex-column align-items-center">
+        <h1 style="color: aliceblue; font-size: 50px;">
+            Compartilhe seus projetos do GitHub. 
+        </h1>
+        <h2 style="color: aliceblue;">
+            Seja encontrado por recrutadores.
+        </h2>
+        <img src="https://readme-typing-svg.herokuapp.com?font=Rubik&size=50&duration=1500&pause=1000&color=CCD4F7&center=true&width=450&height=100&lines=R%C3%A1pido.;F%C3%A1cil.;Gratuito.;Cadastre-se" alt="Typing SVG">       
+        <div class="form mt-4">
+            <a type="button" class="btn_cadastro" href="{% url 'cadastrar_user' %}">Começar agora</a>
+        </div>
     </div>
-    <div class="form">
-            <a type="button" class="btn btn-primary btn-lg p-3 mx-5" href="{% url 'cadastrar_user' %}">Cadastre-se</a>
-
-    </div>
-
 </main>
+
 
 
 {% endblock %}
