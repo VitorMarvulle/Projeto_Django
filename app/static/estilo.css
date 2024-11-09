@@ -2,8 +2,6 @@
 .form{
     justify-content: space-around;
     align-items: center;
-    margin-top: 100px;
-    margin-right: 200px;
     background-color: rgb(181, 221, 255);
     width: 500px;
     height: 500px;
@@ -11,7 +9,4 @@
     border-radius: 5%;
 }
 
-img{
-    margin-left: 200px;
-}
 

@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Usuario, Curso
+from app.models import Usuario, Curso, Foto
 
 class FormCadastroUser(forms.ModelForm):
     class Meta:
@@ -24,6 +24,7 @@ class FormCadastroCurso(forms.ModelForm):
         }
 
 class FormLogin(forms.ModelForm):
+
     class Meta:
         model = Usuario 
         fields = ('email', 'senha')
@@ -31,3 +32,12 @@ class FormLogin(forms.ModelForm):
             'email': forms.EmailInput(attrs={'placeholder': 'usuario@email.com', 'class': 'form-control' }),
             'senha': forms.PasswordInput(attrs={'class': 'form-control border border-success', 'type': 'password' }),        
             }
+        
+class FormFoto(forms.ModelForm):
+    class Meta:
+        model = Foto
+        fields = ['nome','foto']
+
+        widgets = {
+            'foto': forms.FileInput(attrs={'accept':'image/*'})
+        }

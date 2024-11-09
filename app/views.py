@@ -2,9 +2,9 @@ from datetime import timedelta
 from django.shortcuts import render,redirect
 
 #importa a funcao get_template() do módulo loader
-from app.forms import FormCadastroUser, FormCadastroCurso, FormLogin
+from app.forms import FormCadastroUser, FormCadastroCurso, FormLogin, FormFoto
 from django.contrib import messages
-from app.models import Usuario, Curso
+from app.models import Usuario, Curso, Foto
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import logout
 
@@ -200,3 +200,21 @@ def alterar_senha(request):
         return redirect('dashboard')
 
     return render(request, 'alterar_senha.html')
+
+def add_foto(request):
+    if request.method == 'POST':
+        form = FormFoto(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('galeria')
+    else:
+        form = FormFoto()
+    return render (request, 'add_foto.html', {'form': form})
+
+def galeria(request):
+    fotos = Foto.objects.all().values()
+
+    context = {
+        'galeria' : fotos
+    }
+    return render (request, 'galeria.html', context)
