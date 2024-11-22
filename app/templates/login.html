@@ -3,13 +3,13 @@
 
 {% block conteudo %}
 
-<div class="container w-50">
+<div class="container border border-3 border-primary border-opacity-10 rounded-5 mb-5 mt-5 w-25 bg-white bg-opacity-10" style="color: aliceblue;">
     <h1 class = "text-center">Fazer Login</h1>
     <form method="post" action="{% url 'fazerlogin' %}">
         {% csrf_token %}
         {{ formLogin }}
         <div class="d-grid gap-2">
-            <input type="submit" value="Entrar" class="btn btn-success" expand="block">
+            <input type="submit" value="Entrar" class="btn btn-primary w-50 bg-white bg-opacity-10 rounded-5 mb-3" expand="block">
         </div>
     </form>
     <br>

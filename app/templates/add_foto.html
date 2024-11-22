@@ -3,13 +3,13 @@
 {% block titulo %} Adicionar foto {% endblock %}
 {% block conteudo %}
 
-<div class="container col-6 mt-5">
+<div class="container border border-3 border-primary border-opacity-10 rounded-5 mb-5 mt-5 w-25 bg-white bg-opacity-10" style="color: aliceblue;">
     <h1>Enviar foto</h1>
     <br>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type = "submit">Enviar</button>
+        <button class="btn btn-primary w-50 bg-white bg-opacity-10 rounded-5 mb-3" type = "submit">Enviar</button>
     </form>
 </div>
 
