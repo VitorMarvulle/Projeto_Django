@@ -37,6 +37,10 @@ def cadastrar_user(request):
     return render(request, 'cadastro.html', context)
 
 def cadastrar_curso(request):
+    if not request.session.get('email'):
+        messages.error(request, "Faça seu login para cadastrar seu portfólio!")
+        return redirect('fazerlogin')
+    
     novo_curso = FormCadastroCurso(request.POST or None, request.FILES or None)
     #SALVAR USUÁRIO
     if request.POST:
@@ -209,3 +213,8 @@ def contato(request):
     }
 
     return render(request, 'contato.html', context)
+
+def userLogout (request):
+    logout(request)
+    messages.success(request, 'A sessao foi encerrada!')
+    return redirect('app')

@@ -23,6 +23,8 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
     path('alterar_senha/', views.alterar_senha, name='alterar_senha'),
     path('excluir_conta/', views.excluir_conta, name='excluir_conta'),
+    path('logout/', views.userLogout, name='logout'),
+
 
     #foto
     path('add-foto/', views.add_foto, name='add_foto'),

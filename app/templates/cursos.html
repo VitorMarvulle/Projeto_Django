@@ -23,7 +23,10 @@
                     
                     <div class="card-footer">
                         <a href="#" class="btn_contratar">Contratar</a>
+                        {% if request.session.email %}
                         <a href="{% url 'excluir_curso' curso.id %}" class="btn btn-danger rounded-5">Excluir</a>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
