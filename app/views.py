@@ -17,6 +17,7 @@ def app(request):
      }
     return render(request, 'index.html', context)
 
+
 def cadastrar_user(request):
     novo_user = FormCadastroUser(request.POST or None, request.FILES or None)
     
@@ -111,6 +112,10 @@ def fazerlogin(request):
     return render(request, 'login.html', {'formLogin': formL})
 
 def editar_usuario(request, id_usuario):
+    if not request.session.get('email'):
+        messages.error(request, "Faça seu login para Editar ou Excluir contas!")
+        return redirect('fazerlogin')
+
     usuario = Usuario.objects.get(id=id_usuario)
     form = FormCadastroUser(request.POST or None, instance=usuario)
     if request.POST:
@@ -123,6 +128,9 @@ def editar_usuario(request, id_usuario):
     return render(request, 'editar_usuario.html', context)
 
 def excluir_usuario(request, id_usuario):
+    if not request.session.get('email'):
+        messages.error(request, "Faça seu login para Editar ou Excluir contas!")
+        return redirect('fazerlogin')
 
     usuario = Usuario.objects.get(id=id_usuario)
     usuario.delete()
@@ -186,12 +194,19 @@ def add_foto(request):
     return render (request, 'add_foto.html', {'form': form})
 
 def galeria(request):
-    fotos = Foto.objects.all().values()
+    # Buscando as fotos de cada modelo
+    usuarios_fotos = Usuario.objects.all()
+    cursos_fotos = Curso.objects.all()
+    fotos_fotos = Foto.objects.all()
 
+    # Passando as fotos para o contexto
     context = {
-        'galeria' : fotos
+        'usuarios_fotos': usuarios_fotos,
+        'cursos_fotos': cursos_fotos,
+        'fotos_fotos': fotos_fotos,
     }
-    return render (request, 'galeria.html', context)
+    
+    return render(request, 'galeria.html', context)
 
 def excluir_curso(request, id_curso):
     curso = Curso.objects.get(id=id_curso)
@@ -213,6 +228,12 @@ def contato(request):
     }
 
     return render(request, 'contato.html', context)
+
+def venda(request):
+    if not request.session.get('email'):
+        messages.error(request, "Faça seu login para Efetuar a compra!")
+        return redirect('fazerlogin')
+
 
 def userLogout (request):
     logout(request)

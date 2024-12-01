@@ -15,12 +15,13 @@ class FormCadastroUser(forms.ModelForm):
 class FormCadastroCurso(forms.ModelForm):
     class Meta:
         model = Curso
-        fields = ('nome_curso','autor','duracao', 'preco', 'foto')
+        fields = ('nome_curso','autor','duracao', 'preco', 'foto', 'estoque')
         widgets = {
             'nome_curso': forms.TextInput(attrs={'placeholder': 'Nome do Projeto', 'class': 'form-control' }),
             'autor': forms.TextInput(attrs={'placeholder': 'Nome do autor', 'class': 'form-control' }),
             'duracao': forms.NumberInput(attrs={'placeholder': 'Duração em horas', 'class': 'form-control' }),
             'preco': forms.NumberInput(attrs={'step':'0.01', 'placeholder': 'Preço em R$', 'class': 'form-control' }),
+            'estoque': forms.TextInput(attrs={'placeholder': 'Quantidade em estoque', 'class': 'form-control' }),
             'foto': forms.FileInput(attrs={'accept':'image/*'})
 
         }

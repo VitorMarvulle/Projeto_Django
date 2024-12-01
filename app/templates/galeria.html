@@ -1,24 +1,75 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block titulo %} Adicionar foto {% endblock %}
+{% block titulo %}Galeria{% endblock %}
 {% block conteudo %}
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {% if galeria %}
-    {% for g in galeria %}
-    <div class="col">
-      <div class="card text-center">
-            <img src="/media/{{ g.foto }}" class="card-img-top" alt="..." style="width: 250px">
-            <div class="card-body">
-                <h5 class="card-title">{{ g.nome }}</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+<style>
+  .card-img-top {
+      width: 250px; /* Tamanho fixo para a imagem */
+      height: 250px; /* Tamanho fixo para a imagem */
+      object-fit: cover; /* Garante que a imagem cubra a área sem distorção */
+      border-radius: 50%; /* Torna a imagem redonda */
+      margin: 0 auto; /* Centraliza a imagem dentro do card */
+  }
+</style>
+<br>
+<h2  style="color: aliceblue;" >Fotos de Usuários</h2>
+<br>
+<div class="row row-cols-1 row-cols-md-5 g-4 ">
+    {% if usuarios_fotos %}
+        {% for usuario in usuarios_fotos %}
+        <div class="col">
+            <div class="card text-center bg-warning bg-opacity-25">
+                <img src="/media/{{ usuario.foto }}" class="card-img-top" alt="Foto do Usuário" >
+                <div class="card-body">
+                    <h5 class="card-title">{{ usuario.nome }}</h5>
+                </div>
             </div>
-      </div>
-    </div>
-    {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Nenhuma foto de usuário disponível.</p>
     {% endif %}
-    
 </div>
-    
+
+<br>
+<h2  style="color: aliceblue;" >Fotos de capa dos Projetos/Repositórios</h2>
+<br>
+<div class="row row-cols-1 row-cols-md-5 g-4">
+    {% if cursos_fotos %}
+        {% for curso in cursos_fotos %}
+        <div class="col">
+            <div class="card text-center bg-white bg-opacity-25">
+                <img src="/media/{{ curso.foto }}" class="card-img-top" alt="Foto do Curso">
+                <div class="card-body">
+                    <h5 class="card-title">{{ curso.nome_curso }}</h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Nenhuma foto de curso disponível.</p>
+    {% endif %}
+</div>
+
+<br>
+<h2  style="color: aliceblue;" >Fotos Adicionadas pelo menu "Foto"</h2>
+<br>
+<div class="row row-cols-1 row-cols-md-5 g-4">
+    {% if fotos_fotos %}
+        {% for foto in fotos_fotos %}
+        <div class="col">
+          <div class="card text-center bg-success bg-opacity-25">
+            <img src="/media/{{ foto.foto }}" class="card-img-top" alt="Foto Adicionada">
+                <div class="card-body">
+                    <h5 class="card-title">{{ foto.nome }}</h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Nenhuma foto adicional disponível.</p>
+    {% endif %}
+</div>
 
 {% endblock %}
