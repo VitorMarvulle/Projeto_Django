@@ -32,8 +32,12 @@ urlpatterns = [
 
     #projetos
     path('excluir_curso/<int:id_curso>', views.excluir_curso, name='excluir_curso'),
+    path('realizar_venda/<int:id_curso>', views.realizar_venda, name='realizar_venda'),
 
     #contato
     path('contato', views.contato, name='contato'),
 
+    #grafico
+    path('grafico_mes/', views.grafico_mes, name='grafico_mes'),  
+    path('grafico_diario/', views.grafico_diario, name='grafico_diario'),
 ]

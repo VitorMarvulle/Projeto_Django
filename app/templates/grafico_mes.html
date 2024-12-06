@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %} HOME {% endblock %}
+
+{% block conteudo %}
+<main class="d-flex justify-content-center align-items-center text-center" style="min-height: 80vh;">
+    <div class="d-flex flex-column align-items-center">
+        <h1 style="color: aliceblue;">Gráfico Mensal</h1>
+        <h1 style="color: aliceblue;">Gráfico de faturamento total por mês</h1>
+        <img src="data:image/png;base64,{{ graphic }}" alt="Gráfico Mensal">
+    </div>
+</main>
+
+
+{% endblock %}

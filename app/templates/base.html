@@ -41,7 +41,7 @@
                   </li>
                 </ul>
 
-                
+                <h2 style="margin-right: 20px;">Olá, {{ request.session.nome }} :) </h2>
                 <form action="{% url 'logout' %}" method="post" class="d-flex">
                     {% csrf_token %}
                     <button class="btn_entrar" type="submit">Sair</button>
@@ -95,9 +95,9 @@
             <div class="col mb-3">
               <h5>A Empresa</h5>
               <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Missão</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Visão</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Valores</a></li>
+                <li class="nav-item mb-2"><a href="{% url 'grafico_diario' %}"  class="nav-link p-0 text-muted">Vendas Diárias</a></li>
+                <li class="nav-item mb-2"><a href="{% url 'grafico_mes' %}" class="nav-link p-0 text-muted">Vendas Mensais</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Sobre</a></li>
               </ul>
             </div>
         

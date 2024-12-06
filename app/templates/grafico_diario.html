@@ -1,0 +1,14 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %} HOME {% endblock %}
+
+{% block conteudo %}
+<main class="d-flex justify-content-center align-items-center text-center" style="min-height: 80vh;">
+    <div class="d-flex flex-column align-items-center">
+        <h1 style="color: aliceblue;">Gráfico de Vendas Diárias</h1>
+        <img src="data:image/png;base64,{{ graphic }}" alt="Gráfico Diário">
+        </div>
+</main>
+
+{% endblock %}

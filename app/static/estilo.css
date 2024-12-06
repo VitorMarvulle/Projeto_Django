@@ -7,10 +7,13 @@
     font-style: normal;
 }
 
+
+
 body{
     background: rgb(2,0,43);
     background: linear-gradient(37deg, rgba(2,0,43,1) 7%, rgba(10,10,47,1) 45%, rgba(69,33,131,1) 81%, rgba(62,28,117,1) 100%);
 }
+
 
 .btn_entrar {
     all: unset;

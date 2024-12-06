@@ -4,7 +4,7 @@
 {% block conteudo %}
 
 <style>
-    p{
+    p {
         color: aliceblue;
     }
 </style>
@@ -13,30 +13,55 @@
     <h1 style="color: aliceblue;">PROJETOS & REPOSITÓRIOS</h1>
     <div class="row">
         {% for curso in cursos %}
-            <div class="col-lg-4 col-md-6 mb-4">  <!-- Cada curso ocupará 4 colunas no grid -->
-                <div class="card h-100 bg-light bg-opacity-10 border border-primary border-opacity-25 ">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 bg-light bg-opacity-10 border border-primary border-opacity-25">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         {% if curso.foto %}
                             <img src="{{ curso.foto.url }}" alt="Foto do projeto" class="rounded-circle mb-3" width="150" height="150">
                         {% else %}
                             <p>Foto não disponível</p>
                         {% endif %}
-                        <h5 class="card-title text-center">{{ curso.nome_curso }}</h5> 
+                        <h5 class="card-title text-center">{{ curso.nome_curso }}</h5>
                         <p class="card-text text-center"><strong>Autor:</strong> {{ curso.autor }}</p>
                         <p class="card-text text-center"><strong>Duração:</strong> {{ curso.duracao }} horas</p>
                         <p class="card-text text-center"><strong>Preço:</strong> R$ {{ curso.preco }}</p>
                         <p class="card-text text-center"><strong>Qtde. Estoque:</strong> {{ curso.estoque }}</p>
 
                     </div>
-                    <br>
                     <div class="text-center card-footer p-3">
-                        <button type="button" class="btn_contratar" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Contratar
-                        </button>
-                        {% if request.session.email %}
-                        <a href="{% url 'excluir_curso' curso.id %}" class="btn btn-danger rounded-5">Excluir</a>
+                        {% if not request.session.email %}
+                            <button type="button" class="btn_contratar" data-bs-toggle="modal" data-bs-target="#exampleModal_FacaLogin">
+                                Contratar
+                            </button>
+                        {% else %}
+                            <!-- Botão para abrir o modal correspondente ao curso -->
+                            <button type="button" class="btn_contratar" data-bs-toggle="modal" data-bs-target="#modal-{{ curso.id }}">
+                                Contratar
+                            </button>
+                            <button type="button" class="btn_contratar" style="background-color: brown;">
+                              <a style="text-decoration: none; color: aliceblue;" href="{% url 'excluir_curso' curso.id %}">Excluir</a>
+                          </button>
                         {% endif %}
+                    </div>
+                </div>
+            </div>
 
+            <!-- Modal de confirmação para cada curso -->
+            <div class="modal fade" id="modal-{{ curso.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ curso.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modalLabel-{{ curso.id }}">Confirmar compra?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Você confirma a contratação deste projeto?
+                            <p class="card-text text-center"><strong>ID do Curso:</strong> {{ curso.id }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                            <a href="{% url 'realizar_venda' curso.id %}" class="btn btn-primary">Confirmar</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,45 +69,23 @@
     </div>
 </div>
 
-
-<!-- MODAL COMPRAR -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar compra?</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Você confirma a contrataçao deste projeto?
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-            Contratar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL CONFIRMAÇAO -->
-<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+<!-- Modal para usuários não logados -->
+<div class="modal fade" id="exampleModal_FacaLogin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel2">Compra confirmada!</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal2" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Você não está logado.</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Faça seu Login para comprar ou contratar Projetos!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                <a href="{% url 'fazerlogin' %}" class="btn btn-primary">Login</a>
+            </div>
         </div>
-        <div class="modal-body">
-          Obrigado!
-  
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}
